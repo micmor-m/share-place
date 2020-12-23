@@ -1,4 +1,4 @@
-class Modal {
+export class Modal {
   //using parameter contentId to be able to show different thing in the modal
   constructor(contentId, fallbackText) {
     this.fallbackText = fallbackText;
