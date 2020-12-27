@@ -9,8 +9,29 @@ class PlaceFinder {
     const shareBtn = document.getElementById("share-btn");
 
     locateUserBtn.addEventListener("click", this.locateUserHandler.bind(this));
-    //this.sharebtn.addEventListener("click");
+    this.sharebtn.addEventListener("click", this.sharePlaceHandler);
     addressForm.addEventListener("submit", this.findAddressHandler.bind(this));
+  }
+
+  sharePlaceHandler() {
+    const shareLinkInputElement = document.getElementById("share-link");
+    //if the browser the user is using does not support clipboard
+    //as fallback select the text so that the user just need to copy it
+    if (!navigator.clipboard) {
+      shareLinkInputElement.select();
+      return;
+    }
+    //in broeser support clipboard copy the text into it
+    navigator.clipboard
+      .writeText(shareLinkInputElement.value)
+      .then(() => {
+        alert("Copied to clipboard");
+      })
+      //if any error log the error and atleast select the text
+      .catch((err) => {
+        console.log(err);
+        shareLinkInputElement.select();
+      });
   }
 
   selectPlace(coordinates, address) {
