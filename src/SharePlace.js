@@ -6,10 +6,10 @@ class PlaceFinder {
   constructor() {
     const locateUserBtn = document.querySelector("#locate-btn");
     const addressForm = document.querySelector("form");
-    const shareBtn = document.getElementById("share-btn");
+    this.shareBtn = document.getElementById("share-btn");
 
     locateUserBtn.addEventListener("click", this.locateUserHandler.bind(this));
-    this.sharebtn.addEventListener("click", this.sharePlaceHandler);
+    this.shareBtn.addEventListener("click", this.sharePlaceHandler);
     addressForm.addEventListener("submit", this.findAddressHandler.bind(this));
   }
 
