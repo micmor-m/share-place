@@ -1,5 +1,6 @@
 import { Modal } from "./UI/Modal";
 import { Map } from "./UI/Map";
+import { getCoordsFromAddress } from "./Utility/Location";
 
 class PlaceFinder {
   constructor() {
@@ -46,7 +47,7 @@ class PlaceFinder {
     );
   }
 
-  findAddressHandler(event) {
+  async findAddressHandler(event) {
     event.preventDefault();
     const address = event.target.queryselector("input").value;
 
@@ -59,6 +60,10 @@ class PlaceFinder {
       "Loading location please wait."
     );
     modal.show();
+    //getCoordsFromAddress return a promise
+    //to handle it I wrap all method in async
+    const coordinates = await getCoordsFromAddress(address);
+    this.selelctPlace(coordinates);
   }
 }
 
