@@ -1,23 +1,31 @@
 import { Modal } from "./UI/Modal";
 import { Map } from "./UI/Map";
-import { getCoordsFromAddress } from "./Utility/Location";
+import { getCoordsFromAddress, getAddressFromCoords } from "./Utility/Location";
 
 class PlaceFinder {
   constructor() {
     const locateUserBtn = document.querySelector("#locate-btn");
     const addressForm = document.querySelector("form");
+    const shareBtn = document.getElementById("share-btn");
 
     locateUserBtn.addEventListener("click", this.locateUserHandler.bind(this));
-
+    //this.sharebtn.addEventListener("click");
     addressForm.addEventListener("submit", this.findAddressHandler.bind(this));
   }
 
-  selectPlace(coordinates) {
+  selectPlace(coordinates, address) {
     if (this.map) {
       this.map.render(coordinates);
     } else {
       this.map = new Map(coordinates);
     }
+    this.shareBtn.disable = false;
+    const shareLinkInputElement = document.getElementById("share-link");
+    shareLinkInputElement.value = `${
+      location.origin
+    }/share-place?address=${encodeURI(address)}&lat=${coordinates.lat}&lng=${
+      coordinates.lng
+    }`;
   }
 
   locateUserHandler() {
@@ -31,14 +39,15 @@ class PlaceFinder {
     );
     modal.show();
     navigator.geolocation.getCurrentPosition(
-      (successResult) => {
-        modal.hide();
+      async (successResult) => {
         const coordinates = {
           lat: successResult.coords.latitude,
           lng: successResult.coords.longitude,
         };
+        const address = await getAddressFromCoords(coordinates);
+        modal.hide();
         console.log(coordinates);
-        this.selectPlace(coordinates);
+        this.selectPlace(coordinates, address);
       },
       (error) => {
         modal.hide();
@@ -66,7 +75,7 @@ class PlaceFinder {
       //getCoordsFromAddress return a promise
       //to handle it I wrap all method in async
       const coordinates = await getCoordsFromAddress(address);
-      this.selelctPlace(coordinates);
+      this.selelctPlace(coordinates, address);
     } catch (err) {
       alert(err.message);
     }
