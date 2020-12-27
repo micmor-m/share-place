@@ -60,10 +60,17 @@ class PlaceFinder {
       "Loading location please wait."
     );
     modal.show();
-    //getCoordsFromAddress return a promise
-    //to handle it I wrap all method in async
-    const coordinates = await getCoordsFromAddress(address);
-    this.selelctPlace(coordinates);
+    //because the address could contain an error
+    //I need to wrap the function that use it in a try-catch
+    try {
+      //getCoordsFromAddress return a promise
+      //to handle it I wrap all method in async
+      const coordinates = await getCoordsFromAddress(address);
+      this.selelctPlace(coordinates);
+    } catch (err) {
+      alert(err.message);
+    }
+    modal.hide();
   }
 }
 
